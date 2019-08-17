@@ -1,11 +1,15 @@
+const {getList}= require('../controller/blog')
+const {SuccessModule,ErrorModule} = require('../module/resModule')
+
 const handleBlogRouter = (req,res)=>{
     const method = req.method//GET/POST
 
     // 获取博客列表
     if(method === 'GET' && req.path === '/api/blog/list'){
-        return {
-            msg: '这是获取博客列表的接口'
-        }
+       const author = req.query.author||''
+       const keyword = req.query.keyword||''
+       const listData = getList(author,keyword)//获取数据
+       return new SuccessModule(listData)//格式化数据
     }
     // 获取博客详情
     if(method === 'GET' && req.path === '/api/blog/detail'){

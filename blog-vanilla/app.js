@@ -1,5 +1,6 @@
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
+const querystring = require('querystring')
 
 const serverHandle = (req,res)=>{
     // 设置响应数据为JSON类型
@@ -8,6 +9,9 @@ const serverHandle = (req,res)=>{
     // 请求路径
     const url = req.url
     req.path = url.split('?')[0]
+
+    // 解析query
+    req.query = querystring.parse(url.split('?')[1])
 
     // 处理blog路由
     const blogData = handleBlogRouter(req,res)
