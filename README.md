@@ -3,9 +3,9 @@
 ## 配置
 当前项目的服务器配置是
 
-前端(http-server)：localhost:3001
+前端(http-server)：localhost:3001    http-server -p 3001
 
-后端(node.js)：localhost:3000
+后端(node.js)：localhost:3000	npm run dev
 
 nginx需要修改的配置（反向代理）
 端口修改为：8081
