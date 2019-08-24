@@ -8,7 +8,7 @@ const handleUserRouter = (req,res)=>{
     if(method === 'POST' && req.path === '/api/user/login'){
         //来自post的用户名和密码信息
         const {username,password} = req.body
-        const result = login(username,password)
+        const result = login(username+'',password)
         return result.then(val=>{
             // 登录成功
             if(val.username){
