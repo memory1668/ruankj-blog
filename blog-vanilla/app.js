@@ -1,7 +1,8 @@
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 const querystring = require('querystring')
-const {set,get} =require('./src/db/redis')
+const {set,get} = require('./src/db/redis')
+const {access} = require('./src/utils/log')
 
 //生成cookie失效的时间
 const getExpireTime = ()=>{
@@ -36,6 +37,9 @@ const getPostData = (req) => {
 }
 
 const serverHandle = (req, res) => {
+    // 记录access log
+    access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}\n`)
+
     // 设置响应数据为JSON类型
     res.setHeader('Content-Type', 'application/json')
 
