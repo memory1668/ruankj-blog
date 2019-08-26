@@ -39,7 +39,10 @@ const getPostData = (req) => {
 const serverHandle = (req, res) => {
     // 记录access log
     access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}\n`)
-
+    
+    //在控制台输出，让pm2记录日志
+    console.log(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`)
+   
     // 设置响应数据为JSON类型
     res.setHeader('Content-Type', 'application/json')
 
