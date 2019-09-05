@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RBlog-博客</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <!-- 引入css初始化文件 -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/logo-left.png" alt="" width="36px" height="36px">
+            <img src="images/logo-right.png" alt="" width="114px">
+        </div>
+        <div class="search">
+            <input type="text" placeholder="搜索博客">
+            <button id="btnSearch"></button>
+        </div>
+        <div class="login-wrapper">
+            <div class="login">
+                <a href="#">登录</a>
+            </div>
+            <div class="space"></div>
+            <div class="register">
+                <a href="#">注册</a>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <!-- 博客列表 -->
+        <div id="blog-container"></div>
+        <!-- 登录面板 -->
+        <div class="login-panel">
+            <div class="login-title">
+                登录
+                <div class="login-quit">×</div>
+            </div>
+            <div class="login-input">
+                <input type="text" id="textUsername" placeholder="请输入用户名">
+                <input type="password" id="textPassword" placeholder="请输入密码">
+            </div>
+            <div class="login-button">
+                <button id="btnLogin">登录</button>
+            </div>
+            <div class="login-tips">
+                <span>没有账号？</span>
+                <span id="redirectToLogin">注册</span>
+            </div>
+        </div>
+        <!-- 遮罩 -->
+        <div id="shade"></div>
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.23.0/locale/zh-cn.js"></script>
+    <script>
+        // 发送 get 请求
+        function get(url) {
+            return $.get(url)
+        }
+
+        // 显示格式化的时间
+        function getFormatDate(dt) {
+            return moment(dt).format('LL')
+        }
+
+        // 获取 url 参数
+        function getUrlParams() {
+            let paramStr = location.href.split('?')[1] || ''
+            paramStr = paramStr.split('#')[0]
+            const result = {}
+            paramStr.split('&').forEach(itemStr => {
+                const arr = itemStr.split('=')
+                const key = arr[0]
+                const val = arr[1]
+                result[key] = val
+            })
+            return result
+        }
+
+        // 获取 dom 元素
+        const $container = $('#blog-container')
+
+        // 拼接接口 url
+        let url = '/api/blog/list'
+        const urlParams = getUrlParams()
+        if (urlParams.author) {
+            url += '?author=' + urlParams.author
+        }
+
+        // 加载数据
+        get(url).then((res) => {
+            if (res.errorno !== 0) {
+                alert('数据错误')
+                return
+            }
+
+            // 遍历博客列表，并显示
+            const data = res.data || []
+            data.forEach(item => {
+                $container.append($(`
+                    <div class="title-wrapper">
+                        <p class="title">
+                            <a href="/detail.html?id=${item.id}" target="_blank">${item.title}</a>
+                        </p>
+                        <div class="info-wrapper">
+                            <span>
+                                <a href="/index.html?author=${item.author}">${item.author}</a>
+                            </span>
+                            <span>${getFormatDate(item.createtime)}</span>
+                        </div>
+                    </div>
+                `))
+            })
+        })
+
+        // 弹出登录框
+        $(".login a").click((e) => {
+            e.preventDefault()
+            // 显示登录面板
+            $(".login-panel").show()
+            // 显示遮罩
+            $("#shade").show()
+        })
+        // 退出登录弹框
+        $(".login-quit").click(() => {
+            // 隐藏登录面板
+            $(".login-panel").hide()
+            // 隐藏遮罩
+            $("#shade").hide()
+        })
+
+        // 弹出注册框
+        $('.register a').click(()=>{
+            alert("注册功能正在开发中~")
+        })
+
+        // 搜索博客
+        $('#btnSearch').click(()=>{
+            alert("搜索功能正在开发中~")
+        })
+
+
+        // 发送 post 请求
+        function post(url, data = {}) {
+            return $.ajax({
+                type: 'post',
+                url,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+            })
+        }
+
+        $('#btnLogin').click(() => {
+            const username = $('#textUsername').val()
+            const password = $('#textPassword').val()
+            if (username == "") {
+                alert("用户名不能为空")
+            }
+            else if (password == "") {
+                alert("密码不能为空")
+            }
+            else {
+                const url = '/api/user/login'
+                const data = {
+                    username,
+                    password
+                }
+                post(url, data).then(res => {
+                    if (res.errorno === 0) {
+                        // 登录成功
+                        location.href = './admin.html'
+                    } else {
+                        // 登录失败
+                        alert("请输入正确的用户名和密码")
+                    }
+                })
+            }
+        })
+    </script>
+</body>
+
+</html>
