@@ -176,6 +176,7 @@
                 post(url, data).then(res => {
                     if (res.errorno === 0) {
                         // 登录成功
+                        // alert(res.data.username)
                         location.href = './admin.html'
                     } else {
                         // 登录失败

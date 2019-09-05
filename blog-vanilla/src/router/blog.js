@@ -15,7 +15,7 @@ const handleBlogRouter = (req, res) => {
     const id = req.query.id //博客id
     //检查登录状态
     const loginCheck = (req)=>{
-        if(!req.session.username){
+        if(!req.session.username){//根据req.sessison.username是否存在可以判断是否登录
             return Promise.resolve(
                 new ErrorModule('登录失败')
             )

@@ -16,14 +16,14 @@ const handleUserRouter = (req,res)=>{
                 req.session.password = val.password
                 // 更新redis
                 set(req.sessionId,req.session)
-                return new SuccessModule()
+                return new SuccessModule({username:req.session.username})
             // 登录失败
             }else{//如果登录失败val.username为undefined
                 return new ErrorModule('登录失败')
             }
         })
     }
-    // 登录验证测试
+    // // 登录验证测试
     // if(method === 'GET' && req.path === '/api/blog/login-test'){
     //     if(req.session.username){
     //         return Promise.resolve(new SuccessModule({username:req.session.username}))
