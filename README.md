@@ -1,6 +1,6 @@
 # ruankj-blog
 个人博客
-博客地址:http://www.kangjie.club/
+博客地址（请用电脑打开）:http://www.kangjie.club/
 ## 配置
 当前项目的服务器配置是
 
